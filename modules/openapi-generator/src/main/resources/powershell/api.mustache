@@ -172,7 +172,11 @@ function {{{vendorExtensions.x-powershell-method-name}}} {
 
         {{/isNullable}}
         {{/required}}
-        $LocalVarBodyParameter = ${{{paramName}}} | ConvertTo-Json -Depth 100
+        if ($LocalVarContentTypes[0] -eq 'application/octet-stream') {
+            $LocalVarBodyParameter = [System.IO.File]::ReadAllBytes(${{{paramName}}}.FullName)
+        } else {
+            $LocalVarBodyParameter = ${{{paramName}}} | ConvertTo-Json -Depth 100
+        }
 
         {{/bodyParam}}
         {{#authMethods}}
